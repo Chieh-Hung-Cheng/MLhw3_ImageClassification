@@ -25,7 +25,7 @@ class ImageParser:
             self.id_list.append(id)
             original_image = cv2.imread(os.path.join(self.split_path, filename))
             # Image array
-            resize_shape = (512, 512)
+            resize_shape = (128, 128)
             resized_image = cv2.resize(original_image, resize_shape)
             resized_image = torch.permute(torch.FloatTensor(resized_image), (2,0,1))
             self.image_list.append(resized_image)
@@ -37,7 +37,7 @@ class ImageDataset(Dataset):
 
         self.label_list = None
         if label_list is not None:
-            self.label_list = torch.FloatTensor(label_list)
+            self.label_list = torch.LongTensor(label_list)
 
     def __len__(self):
         if self.label_list is not None:

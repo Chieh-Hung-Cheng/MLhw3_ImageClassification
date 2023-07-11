@@ -58,7 +58,7 @@ class Trainer:
             writer.add_scalar("ValidLoss", mean_valid_loss, epoch)
 
             # Update tqdm
-            epochs_pbar.set_description(f"{epoch+1}/{epochs}")
+            epochs_pbar.set_description(f"{epoch+1}/{Config.epochs}")
             epochs_pbar.set_postfix({"train_loss": f"{mean_train_loss:.4f}",
                                      "valid_loss": f"{mean_valid_loss:.4f}",
                                      "early_countdown": f"{Config.early_stop - early_stop_count}",

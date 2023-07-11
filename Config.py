@@ -28,7 +28,7 @@ class Config:
     seed = 3141592
     learning_rate = 1e-5
     epochs = 30000
-    batch_size = 256
+    batch_size = 64
     early_stop = 1000
     valid_ratio = 0.2
 
