@@ -3,6 +3,7 @@ import cv2
 from tqdm import tqdm
 import torch
 from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms
 import numpy as np
 from Config import Config
 
@@ -23,12 +24,21 @@ class ImageParser:
             label, id = [i for i in filename_no_extension.split("_")]
             self.label_list.append(int(label))
             self.id_list.append(id)
-            original_image = cv2.imread(os.path.join(self.split_path, filename))
             # Image array
-            resize_shape = (128, 128)
-            resized_image = cv2.resize(original_image, resize_shape)
-            resized_image = torch.permute(torch.FloatTensor(resized_image), (2,0,1))
-            self.image_list.append(resized_image)
+            original_image = cv2.imread(os.path.join(self.split_path, filename))
+            tensor_image = torch.permute(torch.FloatTensor(original_image), (2,0,1))
+            resized_transformed_image = self.transform_process(tensor_image)
+            self.image_list.append(resized_transformed_image)
+
+
+    def transform_process(self, image_tensor):
+        transformer = transforms.Compose([
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomApply([transforms.RandomRotation(degrees=45)], p=0.5),
+            transforms.RandomApply([transforms.RandomAdjustSharpness(sharpness_factor=0)], p=0.5),
+            transforms.CenterCrop(size=128)
+        ])
+        return transformer(image_tensor)
 
 
 class ImageDataset(Dataset):
