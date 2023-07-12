@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from Config import Config
 from torch.utils.data import random_split
+import os
 
 def fix_randomness(seed):
     torch.manual_seed(seed)
@@ -19,3 +20,7 @@ def split_train_valid(train_dataset):
     actual_train_length = original_train_length - actual_valid_length
     return random_split(train_dataset, [actual_train_length, actual_valid_length],
                         generator=torch.Generator().manual_seed(Config.seed))
+
+def load_model(model_name):
+    Config.model.load_state_dict(torch.load(os.path.join(Config.save_path, f"model_{model_name}.ckpt")))
+    print(f"Loaded model_{model_name}.ckpt into Config.model")
